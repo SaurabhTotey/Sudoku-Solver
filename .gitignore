@@ -1,4 +1,6 @@
 Leiningen.gitignore
 \.idea/
-
 lib/
+target/classes/META-INF/maven/sudoku-solver/sudoku-solver/pom\.properties
+target/stale/leiningen\.core\.classpath\.extract-native-dependencies
+*.iml
