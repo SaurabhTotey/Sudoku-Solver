@@ -1,7 +1,7 @@
 /**
   * Class that represents a board
   */
-private class Board (val values: Array[Array[Int]]) {
+final class Board (val values: Array[Array[Int]]) {
 
     /**
       * Gets the nth row of the board
@@ -14,6 +14,29 @@ private class Board (val values: Array[Array[Int]]) {
       * @param n the nth column of the board
       */
     def column(n: Int): Array[Int] = values.map(row => row(n))
+
+    /**
+      * Gets the block or the subsquare at (n, m)
+      * @param n row of the block (0 is top)
+      * @param m column of the block (0 is left)
+      * @return smaller board that is the specified block
+      */
+    def block(n: Int, m: Int): Board = {
+        null //TODO:
+    }
+
+    /**
+      * Makes a board that is the same as this board, with the new value
+      * @param n row index
+      * @param m column index
+      * @param modified new value
+      * @return new board with modified value
+      */
+    def alterValue(n: Int, m: Int, modified: Int): Board = {
+        val clone = this.values.clone()
+        clone(n)(m) = modified
+        new Board(clone)
+    }
 
     /**
       * Makes a board that is the same as this board, but with the new row
@@ -34,4 +57,16 @@ private class Board (val values: Array[Array[Int]]) {
     def alterColumn(n: Int, modified: Array[Int]): Board = {
         null //TODO:
     }
+
+    /**
+      * Makes a board that is the same as this board, but with the new block
+      * @param n row index
+      * @param m column index
+      * @param modified new block
+      * @return new board with modified block
+      */
+    def alterBlock(n: Int, m: Int, modified: Board): Board = {
+        null //TODO:
+    }
+
 }
