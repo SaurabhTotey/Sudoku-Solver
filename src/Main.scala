@@ -1,8 +1,8 @@
+import scala.io.Source
+
 /**
   * Entry point of the program
   */
-object Main {
-    def main(args: Array[String]): Unit = {
-
-    }
+object Main extends App {
+    println(Source.fromFile("res/board.txt").mkString)
 }
