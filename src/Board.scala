@@ -1,7 +1,15 @@
 /**
   * Class that represents a board
   */
-final class Board (val values: Array[Array[Int]]) {
+final class Board (private val values: Array[Array[Int]]) {
+
+    /**
+      * Gets the value at (n, m)
+      * @param n the row of the value (0 is top)
+      * @param m the column of the value (0 is left)
+      * @return the value (n, m)
+      */
+    def value(n: Int, m: Int): Int = this.values(n)(m)
 
     /**
       * Gets the nth row of the board
@@ -47,7 +55,11 @@ final class Board (val values: Array[Array[Int]]) {
       * @return new board with modified row
       */
     def alterRow(n: Int, modified: Array[Int]): Board = {
-        null //TODO:
+        var modifiedBoard = this.clone().asInstanceOf[Board]
+        for ((value, index) <- modified.zipWithIndex) {
+            modifiedBoard = modifiedBoard.alterValue(n, index, value)
+        }
+        modifiedBoard
     }
 
     /**
@@ -57,7 +69,11 @@ final class Board (val values: Array[Array[Int]]) {
       * @return new board with modified column
       */
     def alterColumn(n: Int, modified: Array[Int]): Board = {
-        null //TODO:
+        var modifiedBoard: Board = this.clone().asInstanceOf[Board]
+        for ((value, index) <- modified.zipWithIndex) {
+            modifiedBoard = modifiedBoard.alterValue(index, n, value)
+        }
+        modifiedBoard
     }
 
     /**
@@ -68,7 +84,13 @@ final class Board (val values: Array[Array[Int]]) {
       * @return new board with modified block
       */
     def alterBlock(n: Int, m: Int, modified: Board): Board = {
-        null //TODO:
+        var modifiedBoard = this.clone().asInstanceOf[Board]
+        for (i <- 0 until 3) {
+            for (j <- 0 until 3) {
+                modifiedBoard = modifiedBoard.alterValue(n * 3 + i, m * 3 + j, modifiedBoard.value(i, j))
+            }
+        }
+        modifiedBoard
     }
 
 }
