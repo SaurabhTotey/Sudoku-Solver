@@ -4,5 +4,14 @@ import scala.io.Source
   * Entry point of the program
   */
 object Main extends App {
-    println(Source.fromFile("res/board.txt").mkString)
+    val boardSize = 9
+    val startingBoard = new Array[Array[Int]](boardSize)
+    for ((letter, index) <- Source.fromFile("res/board.txt").mkString.filterNot(letter => letter.isWhitespace).zipWithIndex) {
+        if (index % boardSize == 0) {
+            startingBoard(index / boardSize) = new Array[Int](boardSize)
+        }
+        startingBoard(index / boardSize)(index % boardSize) = letter.asDigit
+    }
+    val board = new Board(startingBoard)
+    println(board)
 }

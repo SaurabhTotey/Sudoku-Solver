@@ -93,4 +93,12 @@ final class Board (private val values: Array[Array[Int]]) {
         modifiedBoard
     }
 
+    /**
+      * Gets the board as a pretty string
+      * @return a string representation of the board
+      */
+    override def toString: String = {
+        this.values.map(row => row.mkString(" ")).mkString("\n")
+    }
+
 }
