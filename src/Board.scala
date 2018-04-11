@@ -22,7 +22,9 @@ final class Board (val values: Array[Array[Int]]) {
       * @return smaller board that is the specified block
       */
     def block(n: Int, m: Int): Board = {
-        null //TODO:
+        val rowStart = n * 3
+        val colStart = m * 3
+        new Board(values.slice(rowStart, rowStart + 3).map(row => row.slice(colStart, colStart + 3)))
     }
 
     /**
