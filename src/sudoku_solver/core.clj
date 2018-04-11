@@ -1,4 +1,8 @@
-(ns sudoku-solver.core)
+(ns sudoku-solver.core
+  (:require [sudoku-solver.board :refer :all])
+  (:require [clojure.string :refer :all]))
 
 (defn -main []
-  (println "Hello World"))
+  (def board (Board (clojure.string/split-lines (slurp "resources/board.txt"))))
+  (println board)
+  )
