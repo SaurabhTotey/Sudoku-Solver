@@ -12,6 +12,31 @@ final class Board (private val values: Array[Array[Int]]) {
     def value(n: Int, m: Int): Int = this.values(n)(m)
 
     /**
+      * Gets what elements the board currently has
+      * @return a list of the board's unique elements
+      */
+    def distinct: Array[Int] = this.values.flatten.distinct
+
+    /**
+      * Gets whether the board is valid
+      * Is a superficial check, so it won't check that the board is still solvable, just whether it is currently fine
+      * @return the validity of the board in its current state
+      */
+    def isValid: Boolean = {
+        def isVectorValid(vec: Array[Int]): Boolean = {
+            val strippedVector = vec.filterNot(elem => elem == 0)
+            strippedVector.distinct.length == strippedVector.length
+        }
+        !(0 until 9).exists(i => !isVectorValid(row(i)) || !isVectorValid(column(i)))
+    }
+
+    /**
+      * Returns whether the board is solved or not
+      * @return whether the board is solved or not
+      */
+    def isSolved: Boolean = this.isValid && !this.distinct.contains(0)
+
+    /**
       * Gets the nth row of the board
       * @param n the nth row of the board
       */
