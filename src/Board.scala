@@ -1,5 +1,5 @@
 /**
-  * Class that represents a board
+  * Class that represents a Sudoku board
   */
 final class Board (private val values: Array[Array[Int]]) {
 
@@ -31,10 +31,10 @@ final class Board (private val values: Array[Array[Int]]) {
     }
 
     /**
-      * Returns whether the board is solved or not
-      * @return whether the board is solved or not
+      * Returns whether the board is filled or not: does not take into account whether it is correct
+      * @return whether the board is filled or not
       */
-    def isSolved: Boolean = this.isValid && !this.distinct.contains(0)
+    def isFilled: Boolean = !this.distinct.contains(0)
 
     /**
       * Gets the nth row of the board
