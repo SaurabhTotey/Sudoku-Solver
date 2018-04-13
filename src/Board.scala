@@ -21,7 +21,7 @@ final class Board (val values: Array[Array[Int]]) {
             val strippedVector = vec.filterNot(elem => elem == 0)
             strippedVector.distinct.length == strippedVector.length
         }
-        !(0 until 9).exists(i => !isVectorValid(row(i)) || !isVectorValid(column(i)))
+        !(0 until 9).exists(i => !isVectorValid(row(i)) || !isVectorValid(column(i)) || !isVectorValid(block(i % 3, i / 3).values.flatten))
     }
 
     /**
