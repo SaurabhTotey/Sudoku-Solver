@@ -1,7 +1,7 @@
 /**
   * Class that represents a Sudoku board
   */
-final class Board (private val values: Array[Array[Int]]) {
+final class Board (val values: Array[Array[Int]]) {
 
     /**
       * Gets the value at (n, m)
@@ -10,12 +10,6 @@ final class Board (private val values: Array[Array[Int]]) {
       * @return the value (n, m)
       */
     def value(n: Int, m: Int): Int = this.values(n)(m)
-
-    /**
-      * Gets what elements the board currently has
-      * @return a list of the board's unique elements
-      */
-    def distinct: Array[Int] = this.values.flatten.distinct
 
     /**
       * Gets whether the board is valid
@@ -34,7 +28,7 @@ final class Board (private val values: Array[Array[Int]]) {
       * Returns whether the board is filled or not: does not take into account whether it is correct
       * @return whether the board is filled or not
       */
-    def isFilled: Boolean = !this.distinct.contains(0)
+    def isFilled: Boolean = !this.values.flatten.distinct.contains(0)
 
     /**
       * Gets the nth row of the board
