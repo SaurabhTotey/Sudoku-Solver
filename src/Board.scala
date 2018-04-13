@@ -68,51 +68,6 @@ final class Board (val values: Array[Array[Int]]) {
     }
 
     /**
-      * Makes a board that is the same as this board, but with the new row
-      * @param n row index
-      * @param modified new row
-      * @return new board with modified row
-      */
-    def alterRow(n: Int, modified: Array[Int]): Board = {
-        var modifiedBoard = this.clone().asInstanceOf[Board]
-        for ((value, index) <- modified.zipWithIndex) {
-            modifiedBoard = modifiedBoard.alterValue(n, index, value)
-        }
-        modifiedBoard
-    }
-
-    /**
-      * Makes a board that is the same as this board, but with the new column
-      * @param n column index
-      * @param modified new column
-      * @return new board with modified column
-      */
-    def alterColumn(n: Int, modified: Array[Int]): Board = {
-        var modifiedBoard: Board = this.clone().asInstanceOf[Board]
-        for ((value, index) <- modified.zipWithIndex) {
-            modifiedBoard = modifiedBoard.alterValue(index, n, value)
-        }
-        modifiedBoard
-    }
-
-    /**
-      * Makes a board that is the same as this board, but with the new block
-      * @param n row index
-      * @param m column index
-      * @param modified new block
-      * @return new board with modified block
-      */
-    def alterBlock(n: Int, m: Int, modified: Board): Board = {
-        var modifiedBoard = this.clone().asInstanceOf[Board]
-        for (i <- 0 until 3) {
-            for (j <- 0 until 3) {
-                modifiedBoard = modifiedBoard.alterValue(n * 3 + i, m * 3 + j, modifiedBoard.value(i, j))
-            }
-        }
-        modifiedBoard
-    }
-
-    /**
       * Gets the board as a pretty string
       * @return a string representation of the board
       */
