@@ -18,7 +18,7 @@ final class Board (val values: Array[Array[Int]]) {
       */
     def isValid: Boolean = {
         def isVectorValid(vec: Array[Int]): Boolean = {
-            val strippedVector = vec.filterNot(elem => elem == 0)
+            val strippedVector = vec.filter(_ != 0)
             strippedVector.distinct.length == strippedVector.length
         }
         !(0 until 9).exists(i => !isVectorValid(row(i)) || !isVectorValid(column(i)) || !isVectorValid(block(i % 3, i / 3).values.flatten))
@@ -28,7 +28,7 @@ final class Board (val values: Array[Array[Int]]) {
       * Returns whether the board is filled or not: does not take into account whether it is correct
       * @return whether the board is filled or not
       */
-    def isFilled: Boolean = !this.values.flatten.distinct.contains(0)
+    def isFilled: Boolean = !this.values.flatten.contains(0)
 
     /**
       * Gets the nth row of the board
