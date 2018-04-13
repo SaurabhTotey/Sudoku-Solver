@@ -13,7 +13,6 @@ object Main extends App {
         startingBoard(index / boardSize)(index % boardSize) = letter.asDigit
     }
     val board = new Board(startingBoard)
-    for (step <- BoardSolver.solveBoard(board)) {
-        println(step + "\n")
-    }
+    println(board)
+    println(BoardSolver.solveBoard(board))
 }
