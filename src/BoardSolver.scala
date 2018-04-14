@@ -20,19 +20,23 @@ object BoardSolver {
             return null
         }
         val possibleSolutions = (0 until 9).map(i => (0 until 9).map(j => (0 until 9).filter(possibleValue => initialBoard.alterValue(i, j, possibleValue).isValid)))
-        breakable{for (solutionLocation <- (0 until 81).map(i => Array(i / 9, i % 9)).sortWith((a, b) => possibleSolutions(a(0))(a(1)).length < possibleSolutions(b(0))(b(1)).length)) {
-            val answerCandidates = possibleSolutions(solutionLocation(0))(solutionLocation(1))
-            for (potentialAnswer <- answerCandidates) {
-                val tempSolution = solveBoard(initialBoard.alterValue(solutionLocation(0), solutionLocation(1), potentialAnswer))
-                if (tempSolution != null && tempSolution(tempSolution.length - 1).isValid) {
-                    solutionPath = solutionPath ++ tempSolution
+        breakable{
+            for (solutionLocation <- (0 until 81).map(i => Array(i / 9, i % 9)).sortWith((a, b) => possibleSolutions(a(0))(a(1)).length < possibleSolutions(b(0))(b(1)).length)) {
+                val answerCandidates = possibleSolutions(solutionLocation(0))(solutionLocation(1))
+                if (answerCandidates.length == 1) {
+                    solutionPath = solutionPath ++ solveBoard(initialBoard.alterValue(solutionLocation(0), solutionLocation(1), answerCandidates(0)))
                     break()
+                } else {
+                    for (candidate <- answerCandidates) {
+                        val candidateSolutionPath = solveBoard(initialBoard.alterValue(solutionLocation(0), solutionLocation(1), candidate))
+                        if (candidateSolutionPath != null && candidateSolutionPath.last != null && candidateSolutionPath.last.isValid) {
+                            solutionPath = solutionPath ++ candidateSolutionPath
+                            break()
+                        }
+                    }
                 }
             }
-            if (solutionPath.length != 1) {
-                break()
-            }
-        }}
+        }
         solutionPath
     }
 
