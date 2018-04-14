@@ -1,4 +1,4 @@
-import scala.collection.mutable.ArrayBuffer
+import scala.util.control.Breaks._
 
 /**
   * A namespace to separate out board solving logic from other parts or sections of the code
@@ -12,38 +12,28 @@ object BoardSolver {
       * @return an array of boards that shows each step taken to get to the final finished solved board
       */
     def solveBoard(initialBoard: Board): Array[Board] = {
+        var solutionPath = Array(initialBoard)
         if (initialBoard.isFilled) {
             return Array(initialBoard)
         }
-        val possibleSolutions = (0 until 9).map(_ => (0 until 9).map(_ => new ArrayBuffer[Int]()))
-        for (i <- 0 until 9) {
-            for (j <- 0 until 9) {
-                val list = possibleSolutions(i)(j)
-                for (value <- (0 until 9).filter(possibleValue => initialBoard.alterValue(i, j, possibleValue).isValid)) {
-                    list.append(value)
-                }
-                if (list.length == 1) {
-                    println("a")
-                    return Array(initialBoard) ++ solveBoard(initialBoard.alterValue(i, j, list(0)))
+        if (!initialBoard.isValid) {
+            return null
+        }
+        val possibleSolutions = (0 until 9).map(i => (0 until 9).map(j => (0 until 9).filter(possibleValue => initialBoard.alterValue(i, j, possibleValue).isValid)))
+        breakable{for (solutionLocation <- (0 until 81).map(i => Array(i / 9, i % 9)).sortWith((a, b) => possibleSolutions(a(0))(a(1)).length < possibleSolutions(b(0))(b(1)).length)) {
+            val answerCandidates = possibleSolutions(solutionLocation(0))(solutionLocation(1))
+            for (potentialAnswer <- answerCandidates) {
+                val tempSolution = solveBoard(initialBoard.alterValue(solutionLocation(0), solutionLocation(1), potentialAnswer))
+                if (tempSolution != null && tempSolution(tempSolution.length - 1).isValid) {
+                    solutionPath = solutionPath ++ tempSolution
+                    break()
                 }
             }
-        }
-        for (i <- 0 until 9) {
-            for (j <- 0 until 9) {
-                val list = possibleSolutions(i)(j)
-                for (possibleAnswer <- list) {
-                    val branchedSolution = solveBoard(initialBoard.alterValue(i, j, possibleAnswer))
-                    if (branchedSolution != null && branchedSolution.length != 0) {
-                        val solution = branchedSolution(branchedSolution.length - 1)
-                        if (solution.isValid) {
-                            println("b")
-                            return Array(initialBoard) ++ branchedSolution
-                        }
-                    }
-                }
+            if (solutionPath.length != 1) {
+                break()
             }
-        }
-        null
+        }}
+        solutionPath
     }
 
 }

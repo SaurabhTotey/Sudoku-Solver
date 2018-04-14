@@ -1,7 +1,7 @@
 /**
   * Class that represents a Sudoku board
   */
-final class Board (val values: Array[Array[Int]]) {
+final class Board (final val values: Array[Array[Int]]) {
 
     /**
       * Gets the value at (n, m)
@@ -62,7 +62,7 @@ final class Board (val values: Array[Array[Int]]) {
       * @return new board with modified value
       */
     def alterValue(n: Int, m: Int, modified: Int): Board = {
-        val clone = this.values.clone()
+        val clone = this.values.transpose.transpose
         clone(n)(m) = modified
         new Board(clone)
     }
