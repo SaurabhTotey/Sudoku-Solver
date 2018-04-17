@@ -1,5 +1,3 @@
-import scala.util.control.Breaks._
-
 /**
   * A namespace to separate out board solving logic from other parts or sections of the code
   */
@@ -12,6 +10,7 @@ object BoardSolver {
       * @return an array of boards that shows each step taken to get to the final finished solved board
       */
     def solveBoard(initialBoard: Board): Array[Board] = {
+        class SolutionFoundException(val foundSolution: Array[Board]) extends Exception
         if (initialBoard.isValid && initialBoard.isFilled) {
             return Array(initialBoard)
         }
@@ -19,19 +18,19 @@ object BoardSolver {
             return null
         }
         val possibleSolutions = (0 until 9).map(i => (0 until 9).map(j => (1 to 9).filter(possibleValue => initialBoard.value(i, j) == 0 && initialBoard.alterValue(i, j, possibleValue).isValid)))
-        var solutionPath: Array[Board] = null
-        breakable {
+        try {
             for (solutionLocation <- (0 until 81).map(i => Array(i / 9, i % 9)).filter(a => possibleSolutions(a(0))(a(1)).nonEmpty).sortBy(a => possibleSolutions(a(0))(a(1)).length)) {
                 for (solution <- possibleSolutions(solutionLocation(0))(solutionLocation(1))) {
-                    solutionPath = solveBoard(initialBoard.alterValue(solutionLocation(0), solutionLocation(1), solution))
+                    val solutionPath = solveBoard(initialBoard.alterValue(solutionLocation(0), solutionLocation(1), solution))
                     if (solutionPath != null && solutionPath.last != null && solutionPath.last.isValid) {
-                        solutionPath = Array(initialBoard) ++ solutionPath
-                        break()
+                        throw new SolutionFoundException(Array(initialBoard) ++ solutionPath)
                     }
                 }
             }
+            null
+        } catch {
+            case solutionException: SolutionFoundException => solutionException.foundSolution
         }
-        solutionPath
     }
 
 }
