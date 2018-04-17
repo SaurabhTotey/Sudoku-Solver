@@ -1,7 +1,7 @@
 /**
   * Class that represents a Sudoku board
   */
-final class Board (final val values: Array[Array[Int]]) {
+final class Board (private val values: Array[Array[Int]]) {
 
     /**
       * Gets the value at (n, m)
