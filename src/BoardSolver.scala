@@ -19,6 +19,13 @@ object BoardSolver {
         }
         val possibleSolutions = (0 until 9).map(i => (0 until 9).map(j => (1 to 9).filter(possibleValue => initialBoard.value(i, j) == 0 && initialBoard.alterValue(i, j, possibleValue).isValid)))
         try {
+            val numCounts = (0 until 9).map(_ => 0).toArray
+            (0 until 9).foreach(i => (0 until 9).foreach(j => possibleSolutions(i)(j).foreach(value => numCounts(value - 1) += 1)))
+            if (numCounts.contains(1)) {
+                val numberToFill = numCounts.indexOf(1) + 1
+                val locationToUpdate = (0 until 81).filter(i => possibleSolutions(i / 9)(i % 9).contains(numberToFill))(0)
+                throw new SolutionFoundException(Array(initialBoard) ++ solveBoard(initialBoard.alterValue(locationToUpdate / 9, locationToUpdate % 9, numberToFill)))
+            }
             for (solutionLocation <- (0 until 81).map(i => Array(i / 9, i % 9)).filter(a => possibleSolutions(a(0))(a(1)).nonEmpty).sortBy(a => possibleSolutions(a(0))(a(1)).length)) {
                 for (solution <- possibleSolutions(solutionLocation(0))(solutionLocation(1))) {
                     val solutionPath = solveBoard(initialBoard.alterValue(solutionLocation(0), solutionLocation(1), solution))
