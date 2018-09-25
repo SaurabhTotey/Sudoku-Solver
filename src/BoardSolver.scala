@@ -31,7 +31,7 @@ object BoardSolver {
             (0 until 9).foreach(col => literals.push(this.createSolverValue(row, col, value)))
             setClauseForExactlyOneTrue(literals)
         }))
-        //Defines in the solver that no row should contain duplicate numbers
+        //Defines in the solver that no column should contain duplicate numbers
         (0 until 9).foreach(col => (0 until 9).foreach(value => {
             val literals = new VecInt()
             (0 until 9).foreach(row => literals.push(this.createSolverValue(row, col, value)))
@@ -62,13 +62,18 @@ object BoardSolver {
         (0 until 9).foreach(row => (0 until 9).filter(col => initialBoard.value(row, col) != 0).foreach(col => {
             val value = new VecInt()
             value.push(this.createSolverValue(row, col, initialBoard.value(row, col) - 1))
-            solver.addClause(value)
+            this.solver.addClause(value)
         }))
         //Gets the board from the solver
         this.solver.findModel()
-        var returnBoard = initialBoard
-        (0 until 9).foreach(row => (0 until 9).foreach(col => returnBoard = returnBoard.alterValue(row, col, (0 until 9).find(value => this.solver.model(createSolverValue(row, col, value))).get + 1)))
-        returnBoard
+        def createBoardFromSolver(row: Int, col: Int, board: Board): Board = {
+            if (row == 9) {
+                return board
+            }
+            val nextPos = row * 9 + col + 1
+            createBoardFromSolver(nextPos / 9, nextPos % 9, board.alterValue(row, col, (0 until 9).find(value => this.solver.model(this.createSolverValue(row, col, value))).get + 1))
+        }
+        createBoardFromSolver(0, 0, initialBoard)
     }
 
 }
